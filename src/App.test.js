@@ -41,3 +41,24 @@ test("checkbox disables on first click and enables on second click", () => {
   fireEvent.click(checkbox);
   expect(colorButton).toBeEnabled();
 });
+
+// при тестировании события, нужно провести тестирование всех действий по порядку тоесть, 1.тестирование кнопка красная-чекбокс-кнопка серая -чекбокс-кнопка синяя
+//2. тестирование кнопка красная -клик по кнопке-кнопка синяя-чекбокс-кнопка серая-чекбокс-кнопка синяя
+//! тестирование схоже с порядком действий реального пользователя
+
+test("button change color to grey if checkbox checked", () => {
+  render(<App />);
+  const checkbox = screen.getByRole("checkbox", { name: "Disable button" });
+  const colorButton = screen.getByRole("button", { name: "Change to blue" });
+
+  fireEvent.click(checkbox);
+  expect(colorButton).toHaveStyle({ backgroundColor: "gray" });
+  fireEvent.click(checkbox);
+  expect(colorButton).toHaveStyle({ backgroundColor: "red" });
+
+  fireEvent.click(colorButton);
+  fireEvent.click(checkbox);
+  expect(colorButton).toHaveStyle({ backgroundColor: "gray" });
+  fireEvent.click(checkbox);
+  expect(colorButton).toHaveStyle({ backgroundColor: "blue" });
+});
